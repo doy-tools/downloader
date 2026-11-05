@@ -287,7 +287,141 @@
 
     <!-- JAVASCRIPT LOGIC (BAGIAN 2) -->
     <script>
-        // ... (Kode JS menyusul)
-    </script>
+// 1. JAM REAL-TIME
+setInterval(() => {
+    const now = new Date();
+    document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID');
+}, 1000);
+
+// 2. FUNGSI LOG TERMINAL
+function addLog(text, type = 'normal') {
+    const logArea = document.getElementById('log-area');
+    const p = document.createElement('p');
+    p.className = `log-text ${type}`;
+    p.innerText = `> ${text}`;
+    logArea.appendChild(p);
+    logArea.parentElement.scrollTop = logArea.parentElement.scrollHeight;
+}
+
+// 3. FUNGSI UTAMA (EKSEKUSI)
+async function executeHack() {
+    const url = document.getElementById('urlInput').value.trim();
+    if(!url) {
+        addLog("ERROR: TARGET URL KOSONG!", "error");
+        return;
+    }
+
+    // Reset UI
+    const btn = document.getElementById('btnExec');
+    const loading = document.getElementById('loadingArea');
+    const resultArea = document.getElementById('resultArea');
+    const videoBox = document.getElementById('videoBox');
+    const slideBox = document.getElementById('slideBox');
+    const videoPlayer = document.getElementById('videoPlayer');
+    
+    btn.innerText = "[ PROCESSING... ]";
+    btn.disabled = true;
+    loading.classList.add('active');
+    resultArea.classList.remove('result-show');
+    resultArea.classList.add('result-hidden');
+    videoPlayer.src = "";
+    document.getElementById('slideGrid').innerHTML = "";
+
+    addLog(`TARGET ACQUIRED: ${url.substring(0, 30)}...`);
+    
+    // Simulasi Loading Text
+    const loadText = document.getElementById('loadingText');
+    let texts = ["BYPASSING SECURITY...", "DECRYPTING PACKETS...", "EXTRACTING MEDIA..."];
+    let i = 0;
+    const interval = setInterval(() => {
+        loadText.innerText = texts[i % texts.length];
+        i++;
+    }, 800);
+
+    try {
+        // --- API TIKWM (KHUSUS TIKTOK) ---
+        // Catatan: API ini gratis, kalau limit/down, ganti dengan endpoint lain
+        const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
+        
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        clearInterval(interval);
+
+        if(data.code === 0 && data.data) {
+            addLog("EXTRACTION SUCCESSFUL!", "success");
+            
+            const res = data.data;
+            
+            // Cek apakah ini Video atau Foto Slide
+            if(res.images && res.images.length > 0) {
+                // --- HANDLE FOTO SLIDE ---
+                addLog(`DETECTED ${res.images.length} IMAGES.`, "success");
+                videoBox.style.display = 'none';
+                slideBox.style.display = 'flex';
+                slideBox.classList.remove('hidden');
+                
+                const grid = document.getElementById('slideGrid');
+                res.images.forEach((imgUrl, index) => {
+                    const div = document.createElement('div');
+                    div.className = "relative group";
+                    div.innerHTML = `
+                        <img src="${imgUrl}" class="w-full h-32 object-cover rounded border border-[var(--dark-green)]">
+                        <a href="${imgUrl}" download="DOYZ_IMG_${index+1}.jpg" class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition rounded border border-[var(--neon)]">
+                            <span class="material-icons-round text-[var(--neon)]">download</span>
+                            <span class="text-[9px] text-[var(--neon)] mt-1">SAVE</span>
+                        </a>
+                    `;
+                    grid.appendChild(div);
+                });
+
+                // Sembunyiin tombol video
+                document.getElementById('dlVideoBtn').style.display = 'none';
+
+            } else {
+                // --- HANDLE VIDEO ---
+                addLog("VIDEO STREAM DETECTED.", "success");
+                videoBox.style.display = 'block';
+                slideBox.style.display = 'none';
+                
+                const videoUrl = res.hdplay || res.play;
+                videoPlayer.src = videoUrl;
+                
+                // Set tombol download video
+                const dlVideo = document.getElementById('dlVideoBtn');
+                dlVideo.href = videoUrl;
+                dlVideo.style.display = 'flex';
+            }
+
+            // --- HANDLE AUDIO (MP3) ---
+            const dlAudio = document.getElementById('dlAudioBtn');
+            if(res.music_info && res.music_info.play) {
+                dlAudio.href = res.music_info.play;
+                dlAudio.style.display = 'flex';
+                addLog("AUDIO TRACK EXTRACTED.", "success");
+            } else {
+                dlAudio.style.display = 'none';
+            }
+
+            // Tampilkan Result Area
+            resultArea.classList.remove('result-hidden');
+            resultArea.classList.add('result-show');
+
+        } else {
+            addLog("ERROR: API REJECTED THE LINK.", "error");
+            alert("Gagal narik data. Pastiin link TikTok valid atau coba lagi nanti.");
+        }
+
+    } catch (error) {
+        clearInterval(interval);
+        addLog("CONNECTION FAILED / API DOWN.", "error");
+        console.error(error);
+    } finally {
+        // Balikin tombol
+        btn.innerText = "[ EXECUTE_EXTRACTION ]";
+        btn.disabled = false;
+        loading.classList.remove('active');
+    }
+        </script>
 </body>
 </html>
