@@ -3,153 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DOYZ // SOCIAL GRID</title>
+    <title>DOYZ // DOWNLOADER</title>
+    
+    <!-- Fonts & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --neon: #00ff41; 
-            --dark: #050505; 
-            --panel: #111;
+            --bg: #020202;
+            --neon: #00ff41;
+            --dark-green: #003b00;
+            --red: #ff003c;
+            --cyan: #00f0ff;
         }
 
-        body { 
-            background-color: var(--dark); 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            overflow: hidden;
+        * { box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--neon);
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
+                radial-gradient(circle at 50% 0%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;
+            background-position: center top, center center, center center;
         }
 
-        /* Efek Scanline & Glitch */
-        .scanlines::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 50;
-            background-size: 100% 2px, 3px 100%;
+        /* --- EFEK SCANLINE & VIGNETTE --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
-            opacity: 0.8;
+            z-index: 50;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
+            background-size: 100% 4px, 100% 100%;
+            animation: scan 10s linear infinite;
         }
 
-        /* Animasi Kotak Sosmed */
-        .social-card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        @keyframes scan {
+            0% { background-position: 0 0, center; }
+            100% { background-position: 0 100vh, center; }
+        }
+
+        /* --- ANIMASI GLITCH TEKS --- */
+        .glitch-wrapper { position: relative; display: inline-block; }
+        .glitch {
             position: relative;
-            overflow: hidden;
+            color: var(--neon);
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+        }
+        .glitch::before {
+            left: 2px; text-shadow: -2px 0 var(--red);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px; text-shadow: -2px 0 var(--cyan);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
         }
 
-        .social-card:hover {
-            border-color: var(--neon);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
-            transform: translateY(-5px) scale(1.02);
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 83px, 0); }
+            20% { clip: rect(62px, 9999px, 14px, 0); }
+            40% { clip: rect(33px, 9999px, 91px, 0); }
+            60% { clip: rect(78px, 9999px, 50px, 0); }
+            80% { clip: rect(12px, 9999px, 67px, 0); }
+            100% { clip: rect(55px, 9999px, 22px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(12px, 9999px, 55px, 0); }
+            40% { clip: rect(89px, 9999px, 33px, 0); }
+            60% { clip: rect(21px, 9999px, 78px, 0); }
+            80% { clip: rect(45px, 9999px, 11px, 0); }
+            100% { clip: rect(90px, 9999px, 44px, 0); }
         }
 
-        .social-card::before {
+        /* --- KOTAK TERMINAL --- */
+        .terminal-box {
+            background: rgba(0, 10, 0, 0.7);
+            border: 1px solid var(--neon);
+            box-shadow: inset 0 0 20px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.2);
+            position: relative;
+            backdrop-filter: blur(4px);
+        }
+        
+        .terminal-box::before {
             content: '';
             position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            top: -1px; left: -1px; width: 10px; height: 10px;
+            border-top: 2px solid var(--neon); border-left: 2px solid var(--neon);
+        }
+        .terminal-box::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px; width: 10px; height: 10px;
+            border-bottom: 2px solid var(--neon); border-right: 2px solid var(--neon);
+        }
+
+        /* --- INPUT HACKER --- */
+        .input-hack {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--dark-green);
+            color: var(--neon);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            width: 100%;
+            padding: 10px 5px;
+        }
+        .input-hack:focus {
+            border-bottom: 2px solid var(--neon);
+            box-shadow: 0 10px 10px -10px var(--neon);
+        }
+        .input-hack::placeholder { color: var(--dark-green); }
+
+        /* --- TOMBOL HACKER --- */
+        .btn-hack {
+            background: var(--dark-green);
+            color: var(--neon);
+            border: 1px solid var(--neon);
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        .btn-hack:hover {
+            background: var(--neon);
+            color: var(--bg);
+            box-shadow: 0 0 20px var(--neon);
+        }
+        
+        .btn-hack::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             transition: 0.5s;
         }
+        .btn-hack:hover::before { left: 100%; }
 
-        .social-card:hover::before {
-            left: 100%;
+        /* --- LOADING ANIMATION --- */
+        .loader-container { display: none; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0; }
+        .loader-container.active { display: flex; }
+        .radar {
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 2px solid var(--dark-green);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,255,65,0.2);
         }
-
-        .icon-box {
-            filter: drop-shadow(0 0 5px var(--neon));
+        .radar::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: conic-gradient(var(--neon) 0deg, transparent 90deg, transparent 360deg);
+            animation: radar-spin 1s linear infinite;
         }
+        @keyframes radar-spin { 100% { transform: rotate(360deg); } }
 
-        /* Animasi Muncul */
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--dark-green); border: 1px solid var(--neon); }
 
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* --- GLITCH BOX (HASIL) --- */
+        .result-hidden { display: none; opacity: 0; transform: translateY(20px); transition: 0.5s; }
+        .result-show { display: flex; opacity: 1; transform: translateY(0); }
 
-        /* Delay Animasi */
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-        .delay-6 { animation-delay: 0.6s; }
-
-        /* Text Glow */
-        .text-glow {
-            text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
-        }
-
+        /* --- TERMINAL LOG --- */
+        .log-text { font-size: 10px; color: var(--dark-green); margin-bottom: 2px; }
+        .log-text.success { color: var(--neon); }
+        .log-text.error { color: var(--red); }
     </style>
 </head>
-<body class="scanlines h-screen flex flex-col items-center justify-center p-6">
+<body class="flex flex-col items-center p-4">
 
-    <!-- Header -->
-    <div class="text-center mb-10 fade-in-up">
-        <h1 class="text-3xl font-black text-glow text-[var(--neon)] tracking-widest mb-2">SOCIAL GRID</h1>
-        <p class="text-xs text-gray-400 font-mono">CONNECTING TO DOYZ NETWORK...</p>
-    </div>
+    <!-- Efek Layar -->
+    <div class="overlay"></div>
 
-    <!-- Grid Sosmed -->
-    <div class="grid grid-cols-2 gap-4 w-full max-w-md z-10">
-        
-        <!-- TikTok -->
-        <a href="https://tiktok.com/@plermelayang" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-1">
-            <span class="material-icons-round text-4xl text-white icon-box">music_note</span>
-            <span class="text-sm font-bold tracking-wider">TIKTOK</span>
-        </a>
+    <!-- HEADER -->
+    <header class="w-full max-w-md flex justify-between items-start mt-4 mb-8 z-10">
+        <div>
+            <div class="glitch-wrapper">
+                <h1 class="glitch text-2xl" data-text="DOYZ_OVERRIDE">DOYZ_OVERRIDE</h1>
+            </div>
+            <p class="text-[9px] text-[var(--dark-green)] mt-1 tracking-widest">v2.0.1 // KERNEL_ACCESS</p>
+        </div>
+        <div class="text-right">
+            <p class="text-[10px] text-[var(--neon)] animate-pulse">● CONNECTED</p>
+            <p class="text-[9px] text-[var(--dark-green)]" id="clock">00:00:00</p>
+        </div>
+    </header>
 
-        <!-- Instagram -->
-        <a href="https://instagram.com/doyz_asma" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-2">
-            <span class="material-icons-round text-4xl text-pink-500 icon-box" style="filter: drop-shadow(0 0 5px #ec4899);">camera_alt</span>
-            <span class="text-sm font-bold tracking-wider">INSTAGRAM</span>
-        </a>
+    <!-- MAIN CONTAINER -->
+    <main class="w-full max-w-md flex flex-col gap-6 z-10">
 
-        <!-- WhatsApp -->
-        <a href="https://wa.me/6285881599723" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-3">
-            <span class="material-icons-round text-4xl text-green-500 icon-box" style="filter: drop-shadow(0 0 5px #22c55e);">whatsapp</span>
-            <span class="text-sm font-bold tracking-wider">WHATSAPP</span>
-        </a>
+        <!-- LOG TERMINAL -->
+        <div class="terminal-box p-3 rounded-sm h-24 overflow-y-auto flex flex-col justify-end">
+            <div id="log-area">
+                <p class="log-text success">> SYSTEM BOOT... OK</p>
+                <p class="log-text">> AWAITING TARGET URL_</p>
+            </div>
+        </div>
 
-        <!-- Facebook -->
-        <a href="https://facebook.com/" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-4">
-            <span class="material-icons-round text-4xl text-blue-500 icon-box" style="filter: drop-shadow(0 0 5px #3b82f6);">facebook</span>
-            <span class="text-sm font-bold tracking-wider">FACEBOOK</span>
-        </a>
+        <!-- INPUT SECTION -->
+        <div class="terminal-box p-5 rounded-sm">
+            <div class="flex items-center gap-2 mb-4 border-b border-[var(--dark-green)] pb-2">
+                <span class="material-icons-round text-sm text-[var(--neon)]">terminal</span>
+                <span class="text-xs font-bold tracking-widest text-[var(--neon)]">TARGET_INPUT</span>
+            </div>
+            
+            <label class="text-[10px] text-[var(--dark-green)] mb-1 block">>_ MASUKKAN URL (TIKTOK / IG / YT)</label>
+            <input type="text" id="urlInput" class="input-hack mb-6" placeholder="https://..." autocomplete="off">
+            
+            <button onclick="executeHack()" id="btnExec" class="btn-hack w-full p-4 text-sm">
+                [ EXECUTE_EXTRACTION ]
+            </button>
+        </div>
 
-        <!-- Telegram -->
-        <a href="https://t.me/" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-5">
-            <span class="material-icons-round text-4xl text-sky-400 icon-box" style="filter: drop-shadow(0 0 5px #38bdf8);">send</span>
-            <span class="text-sm font-bold tracking-wider">TELEGRAM</span>
-        </a>
+        <!-- LOADING SECTION -->
+        <div id="loadingArea" class="loader-container">
+            <div class="radar mb-3"></div>
+            <p class="text-xs text-[var(--neon)] animate-pulse tracking-widest" id="loadingText">BYPASSING SECURITY...</p>
+        </div>
 
-        <!-- YouTube -->
-        <a href="https://youtube.com/" target="_blank" class="social-card p-5 rounded-2xl flex flex-col items-center justify-center gap-3 fade-in-up delay-6">
-            <span class="material-icons-round text-4xl text-red-500 icon-box" style="filter: drop-shadow(0 0 5px #ef4444);">play_circle_filled</span>
-            <span class="text-sm font-bold tracking-wider">YOUTUBE</span>
-        </a>
+        <!-- RESULT SECTION (HIDDEN BY DEFAULT) -->
+        <div id="resultArea" class="result-hidden flex-col gap-4 w-full">
+            
+            <!-- VIDEO PLAYER BOX -->
+            <div id="videoBox" class="terminal-box p-2 rounded-sm relative">
+                <div class="absolute top-4 left-4 z-20 bg-black/80 px-2 py-1 border border-[var(--neon)] text-[9px] text-[var(--neon)]">MEDIA_LOCKED</div>
+                <video id="videoPlayer" controls playsinline class="w-full rounded-sm border border-[var(--dark-green)] bg-black"></video>
+            </div>
 
-    </div>
+            <!-- SLIDE BOX (FOTO) -->
+            <div id="slideBox" class="terminal-box p-4 rounded-sm hidden flex-col">
+                <p class="text-xs text-[var(--neon)] mb-3 font-bold">>_ IMAGE_ARRAY_DETECTED</p>
+                <div id="slideGrid" class="grid grid-cols-2 gap-3"></div>
+            </div>
 
-    <!-- Footer -->
-    <div class="mt-12 text-[10px] text-gray-600 font-mono fade-in-up delay-6">
-        <p>SYS.CONNECTION // SECURE</p>
-        <p class="text-[var(--neon)] mt-1">© 2026 DOYZ</p>
-    </div>
+            <!-- DOWNLOAD BUTTONS -->
+            <div class="grid grid-cols-1 gap-3 mt-2">
+                <a id="dlVideoBtn" href="#" download class="btn-hack p-4 text-center text-sm flex justify-center items-center gap-2">
+                    <span class="material-icons-round text-sm">download</span> DOWNLOAD_MP4
+                </a>
+                <a id="dlAudioBtn" href="#" download class="btn-hack p-4 text-center text-sm flex justify-center items-center gap-2" style="border-color: var(--cyan); color: var(--cyan);">
+                    <span class="material-icons-round text-sm">audiotrack</span> DOWNLOAD_MP3
+                </a>
+            </div>
 
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full max-w-md mt-10 text-center z-10">
+        <p class="text-[9px] text-[var(--dark-green)] tracking-widest">POWERED BY DOYZ // NO SYSTEM IS SAFE</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC (BAGIAN 2) -->
+    <script>
+        // ... (Kode JS menyusul)
+    </script>
 </body>
 </html>
