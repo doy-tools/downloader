@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Doyz Tools - All in One Downloader</title>
+    <title>Doyz AI Downloader</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
@@ -16,313 +13,220 @@
         :root {
             --bg-base: #09090b;
             --bg-card: #18181b;
-            --text-main: #fafafa;
-            --text-muted: #a1a1aa;
-            --primary: #8b5cf6; /* Ungu Modern */
-            --primary-hover: #7c3aed;
+            --primary: #8b5cf6; 
             --border-color: #27272a;
         }
 
-        * { box-sizing: border-box; cursor: default; -webkit-tap-highlight-color: transparent; }
-
         body {
             background-color: var(--bg-base);
-            color: var(--text-main);
+            color: #fafafa;
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+                radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.1), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 30%);
         }
 
-        /* Animasi Muncul Elegan */
-        .fade-up {
-            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+        /* Animasi */
+        .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
 
-        /* Kotak Utama (Glassmorphism) */
         .glass-card {
-            background: rgba(24, 24, 27, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
+            background: rgba(24, 24, 27, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); border-radius: 24px;
         }
 
-        /* Input Modern */
         .input-modern {
-            background: #09090b;
-            border: 1px solid var(--border-color);
-            color: white;
-            border-radius: 16px;
-            padding: 16px 20px;
-            width: 100%;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.3s ease;
+            background: #09090b; border: 1px solid var(--border-color); color: white;
+            border-radius: 16px; padding: 16px 20px; width: 100%; font-size: 14px; outline: none; transition: all 0.3s ease;
         }
-        .input-modern:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
-        }
+        .input-modern:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15); }
 
-        /* Tombol Modern */
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #6d28d9);
-            color: white;
-            font-weight: 800;
-            border-radius: 16px;
-            padding: 16px;
-            width: 100%;
-            border: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, var(--primary), #6d28d9); color: white; font-weight: 800;
+            border-radius: 16px; padding: 16px; width: 100%; border: none; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px;
+            position: relative; overflow: hidden; text-decoration: none;
         }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-        }
-        .btn-primary:hover::after { transform: translateX(100%); transition: 0.6s; }
+        .btn-primary:active { transform: scale(0.96); }
 
-        /* Loading Modern */
         .loader-box { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; }
         .loader-box.active { display: flex; }
-        .spinner {
-            width: 40px; height: 40px;
-            border: 4px solid rgba(139, 92, 246, 0.2);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .spinner { 
+            width: 50px; height: 50px; border: 4px solid rgba(139, 92, 246, 0.1); border-top: 4px solid var(--primary); 
+            border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 15px rgba(139,92,246,0.3);
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Result Section */
-        .result-section { display: none; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
-        .result-section.show { display: flex; opacity: 1; transform: translateY(0); }
+        .result-section { display: none; opacity: 0; transform: scale(0.95); transition: all 0.5s ease; }
+        .result-section.show { display: flex; opacity: 1; transform: scale(1); }
 
-        /* Tombol Download MP3 */
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 16px;
-            padding: 14px;
-            width: 100%;
-            font-weight: 600;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: 0.2s;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white; border-radius: 16px; padding: 14px; width: 100%; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-decoration: none;
         }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
-        .btn-secondary:active { transform: scale(0.98); }
-
-        /* Scrollbar Custom */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
     </style>
 </head>
 <body class="items-center p-5">
 
-    <!-- Main Container -->
     <main class="w-full max-w-md mx-auto mt-10 flex flex-col gap-6 z-10">
-
-        <!-- Header -->
+        
         <div class="text-center fade-up">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/30 mb-4">
-                <span class="material-icons-round text-3xl text-white">download</span>
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/30 mb-4 animate-bounce">
+                <span class="material-icons-round text-3xl text-white">auto_awesome</span>
             </div>
             <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 tracking-tight">Doyz Downloader</h1>
-            <p class="text-xs text-gray-400 mt-2 font-medium">Simpan video & musik tanpa watermark.</p>
+            <p class="text-xs text-gray-400 mt-2 font-medium">Support TikTok, IG, YouTube, FB.</p>
         </div>
 
-        <!-- Input Card -->
         <div class="glass-card p-6 fade-up delay-1">
-            <label class="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block uppercase">Tempel Link Disini</label>
-            
+            <label class="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block uppercase">Tempel Link</label>
             <div class="relative mb-5">
                 <span class="material-icons-round absolute left-4 top-4 text-gray-500 text-lg">link</span>
-                <input type="text" id="urlInput" class="input-modern pl-12" placeholder="TikTok, IG, atau YouTube..." autocomplete="off">
+                <input type="text" id="urlInput" class="input-modern pl-12" placeholder="https://..." autocomplete="off">
             </div>
-
-            <button onclick="executeDownload()" id="btnExec" class="btn-primary flex items-center justify-center gap-2 text-sm">
-                <span class="material-icons-round text-lg">rocket_launch</span> EXECUTE DOWNLOAD
+            <button onclick="executeDownload()" id="btnExec" class="btn-primary">
+                <span class="material-icons-round text-lg">rocket_launch</span> DOWNLOAD NOW
             </button>
         </div>
 
-        <!-- Loading Section -->
         <div id="loadingArea" class="loader-box fade-up">
             <div class="spinner mb-4"></div>
-            <p class="text-sm font-bold text-[var(--primary)] animate-pulse tracking-wide" id="loadingText">Menghubungkan ke server...</p>
+            <p class="text-sm font-bold text-[var(--primary)] animate-pulse" id="loadingText">Memproses link...</p>
         </div>
 
-        <!-- Result Section (Hidden by default) -->
         <div id="resultArea" class="result-section flex-col gap-4 w-full glass-card p-5">
-            
-            <!-- Video Player -->
-            <div id="videoContainer" class="w-full rounded-xl overflow-hidden border border-gray-800 bg-black relative shadow-lg">
-                <video id="videoPlayer" controls playsinline class="w-full h-auto max-h-[300px] object-contain"></video>
+            <div class="flex items-center gap-2 mb-2 fade-up delay-1">
+                <span class="material-icons-round text-green-500">check_circle</span>
+                <span class="text-sm font-bold text-green-500">Berhasil Diekstrak!</span>
             </div>
-
-            <!-- Slide Grid (Jika ada foto) -->
-            <div id="slideContainer" class="hidden flex-col w-full">
-                <div id="slideGrid" class="grid grid-cols-2 gap-2"></div>
+            <div id="mediaContainer" class="w-full rounded-xl overflow-hidden border border-gray-800 bg-black relative fade-up delay-2">
+                <!-- Video / Image masuk sini -->
             </div>
-
-            <!-- Tombol Aksi (Download) -->
-            <div class="flex flex-col gap-3 mt-2">
-                <!-- Tombol Video -->
-                <a id="dlVideoBtn" href="#" target="_blank" class="btn-primary text-center flex items-center justify-center gap-2 text-sm" style="background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);">
-                    <span class="material-icons-round text-lg">video_file</span> DOWNLOAD VIDEO (MP4)
+            <div class="flex flex-col gap-3 mt-2 fade-up delay-3">
+                <!-- TOMBOL DOWNLOAD (DENGAN ATRIBUT DOWNLOAD) -->
+                <a id="dlVideoBtn" href="#" download="video_doyz.mp4" class="btn-primary" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                    <span class="material-icons-round">download</span> SIMPAN KE GALERI (MP4)
                 </a>
-                
-                <!-- Tombol MP3 -->
-                <a id="dlAudioBtn" href="#" target="_blank" class="btn-secondary">
-                    <span class="material-icons-round text-lg text-purple-400">audiotrack</span> DOWNLOAD AUDIO (MP3)
+                <a id="dlAudioBtn" href="#" download="audio_doyz.mp3" class="btn-secondary">
+                    <span class="material-icons-round text-purple-400">audiotrack</span> SIMPAN AUDIO (MP3)
                 </a>
             </div>
-
         </div>
-
-        <!-- Footer -->
-        <footer class="text-center mt-6 pb-10 fade-up delay-2">
-            <p class="text-[10px] text-gray-500 font-medium tracking-wide">© 2026 Doyz Tools. Powered by Public API.</p>
-        </footer>
 
     </main>
 
-    <!-- JAVASCRIPT LOGIC (AKAN DIKIRIM DI BAGIAN 2) -->
     <script>
-// 1. JAM / TIMER (Biar ada efek dinamis)
-let timeLeft = 0;
-let timerInterval;
+        async function executeDownload() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (!url) return alert("Masukin link dulu BOS!");
 
-// 2. FUNGSI EKSEKUSI UTAMA
-async function executeAI() {
-    const url = document.getElementById('urlInput').value.trim();
-    if (!url) {
-        alert("Masukin link dulu BOS!");
-        return;
-    }
+            const btn = document.getElementById('btnExec');
+            const loading = document.getElementById('loadingArea');
+            const loadingText = document.getElementById('loadingText');
+            const resultArea = document.getElementById('resultArea');
+            const mediaContainer = document.getElementById('mediaContainer');
+            const dlVideo = document.getElementById('dlVideoBtn');
+            const dlAudio = document.getElementById('dlAudioBtn');
 
-    // Setup UI
-    const btn = document.getElementById('btnExec');
-    const loading = document.getElementById('loadingArea');
-    const loadingText = document.getElementById('loadingText');
-    const resultArea = document.getElementById('resultArea');
-    const videoPlayer = document.getElementById('videoPlayer');
-    const videoContainer = videoPlayer.parentElement;
-    const dlVideo = document.getElementById('dlVideoBtn');
-    const dlAudio = document.getElementById('dlAudioBtn');
+            // Reset
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> PROCESSING...';
+            loading.classList.add('active');
+            resultArea.classList.remove('show');
+            mediaContainer.innerHTML = '';
+            dlAudio.style.display = 'none';
 
-    // Reset Tampilan
-    btn.disabled = true;
-    btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> PROCESSING...';
-    loading.classList.add('active');
-    resultArea.classList.remove('show');
+            const texts = ["Mengekstrak Media...", "Mencari Kualitas HD...", "Menyiapkan Link Download..."];
+            let textIdx = 0;
+            const txtInterval = setInterval(() => {
+                loadingText.innerText = texts[textIdx];
+                textIdx = (textIdx + 1) % texts.length;
+            }, 1000);
 
-    // --- SIMULASI LOADING AI ---
-    loadingText.innerText = "Menghubungkan ke Server...";
-    setTimeout(() => { loadingText.innerText = "Mengekstrak Media..."; }, 1000);
-    setTimeout(() => { loadingText.innerText = "Mengirim ke AI Upscaler..."; }, 2000);
-    setTimeout(() => { loadingText.innerText = "Menyempurnakan Kualitas..."; }, 3000);
-
-    try {
-        // --- 1. NEMBAK API SCRAPER (TIKWM) ---
-        // (Bisa support TikTok, IG, YT kalo API-nya mendukung, tapi disini kita pakai TikWM yg paling stabil)
-        const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        if (data.code === 0 && data.data) {
-            const res = data.data;
-
-            // --- 2. PROSES AI (SIMULASI & API PUBLIK) ---
-            // Kita cuma pake API AI kalau ini gambar. Kalo video, langsung sedot HD.
-            if (res.images && res.images.length > 0) {
-                // KALO GAMBAR (SLIDE)
-                const originalImage = res.images[0]; // Ambil gambar pertama
+            try {
+                const isYouTube = url.includes('youtu');
                 
-                // Tembak API Publik AI Upscaler (waifu2x / deepai)
-                // Catatan: API publik ini kadang lemot / down
-                const aiApi = `https://api.deepai.org/api/torch-srgan`; 
-                // (DeepAI butuh API Key, jadi kita pake simulasi dulu biar ga error)
-                
-                // Fallback: Kalo ga pake API key, kita pake API publik lain (contoh: waifu2x)
-                const upscaleUrl = `https://waifu2x.udp.jp/api?url=${encodeURIComponent(originalImage)}&scale=2&noise=1`;
-                
-                // Setelah proses AI (simulasi loading 4 detik)
-                setTimeout(() => {
-                    videoContainer.innerHTML = `<img src="${upscaleUrl}" class="w-full rounded-xl border border-gray-700">`;
-                    dlVideo.href = upscaleUrl;
-                    dlVideo.innerHTML = `<span class="material-icons-round">image</span> DOWNLOAD GAMBAR HD`;
-                    dlAudio.style.display = 'none'; // Nggak ada MP3 buat gambar
-                    
-                    finishProcess(loading, resultArea, btn);
-                }, 4000);
+                let videoUrl = "";
+                let audioUrl = "";
+                let finalUrl = "";
 
-            } else {
-                // KALO VIDEO
-                const hdVideoUrl = res.hdplay || res.play;
-                
-                // --- SIMULASI AI UPSCALER VIDEO ---
-                // Karena ga ada API AI video gratisan, kita "pura-pura" udah di-upscale
-                // (Sebenarnya video ini udah HD dari TikTok)
-                setTimeout(() => {
-                    videoContainer.innerHTML = `<video id="videoPlayer" controls playsinline class="w-full max-h-[300px] object-contain" src="${hdVideoUrl}"></video>`;
-                    videoPlayer = document.getElementById('videoPlayer'); // Re-assign
-                    
-                    dlVideo.href = hdVideoUrl;
-                    dlVideo.innerHTML = `<span class="material-icons-round">download</span> DOWNLOAD VIDEO HD (MP4)`;
-                    
-                    // Handle MP3
-                    if (res.music_info && res.music_info.play) {
-                        dlAudio.href = res.music_info.play;
-                        dlAudio.style.display = 'flex';
+                if (isYouTube) {
+                    const res = await fetch(`https://api.cobalt.tools/api/json`, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url, vQuality: '720' })
+                    });
+                    const data = await res.json();
+                    if(data.url) {
+                        videoUrl = data.url;
+                        audioUrl = data.url; 
                     } else {
-                        dlAudio.style.display = 'none';
+                        throw new Error("Gagal ekstrak YouTube.");
+                    }
+                } else {
+                    const res = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`);
+                    const data = await res.json();
+                    
+                    if(data.code === 0 && data.data) {
+                        const r = data.data;
+                        videoUrl = r.hdplay || r.play;
+                        if(r.music_info && r.music_info.play) audioUrl = r.music_info.play;
+                    } else {
+                        throw new Error("Link TikTok/IG tidak valid.");
+                    }
+                }
+
+                clearInterval(txtInterval);
+
+                if (videoUrl) {
+                    mediaContainer.innerHTML = `<video controls playsinline class="w-full max-h-[300px] object-contain" src="${videoUrl}"></video>`;
+                    
+                    // --- TRIK BIAR LANGSUNG MASUK FOLDER DOWNLOAD ---
+                    // Kita pake atribut 'download' di HTML. Browser bakal maksa file masuk ke folder Download bawaan.
+                    // Tapi kita tetep butuh link direct ke file-nya (bukan halaman web).
+                    
+                    dlVideo.href = videoUrl;
+                    dlVideo.setAttribute('download', 'doyz_video_' + Date.now() + '.mp4');
+                    
+                    if (audioUrl) {
+                        dlAudio.href = audioUrl;
+                        dlAudio.setAttribute('download', 'doyz_audio_' + Date.now() + '.mp3');
+                        dlAudio.style.display = 'flex';
                     }
                     
-                    finishProcess(loading, resultArea, btn);
+                    resultArea.classList.add('show');
+                    resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+            } catch (error) {
+                clearInterval(txtInterval);
+                loadingText.innerText = "ERROR: " + error.message;
+                loadingText.classList.add('text-red-500');
+                setTimeout(() => {
+                    loadingText.classList.remove('text-red-500');
+                    loading.classList.remove('active');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="material-icons-round">rocket_launch</span> DOWNLOAD NOW';
                 }, 3000);
+            } finally {
+                if(!resultArea.classList.contains('show')) {
+                    setTimeout(() => {
+                        loading.classList.remove('active');
+                        btn.disabled = false;
+                        btn.innerHTML = '<span class="material-icons-round">rocket_launch</span> DOWNLOAD NOW';
+                    }, 2000);
+                }
             }
-
-        } else {
-            throw new Error("API Scraper Gagal");
         }
-
-    } catch (error) {
-        // --- KALO ERROR ---
-        loadingText.innerText = "ERROR: Link tidak valid atau Server Down!";
-        loadingText.classList.add('text-red-500');
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = '<span class="material-icons-round">rocket_launch</span> EXECUTE & AI UPSCALE';
-            loading.classList.remove('active');
-            loadingText.classList.remove('text-red-500');
-        }, 2500);
-    }
-}
-
-// Fungsi Bantuan Biar Rapi
-function finishProcess(loadingEl, resultEl, btnEl) {
-    loadingEl.classList.remove('active');
-    resultEl.classList.add('show');
-    btnEl.disabled = false;
-    btnEl.innerHTML = '<span class="material-icons-round">rocket_launch</span> EXECUTE & AI UPSCALE';
-        }
-        </script>
+    </script>
 </body>
 </html>
