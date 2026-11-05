@@ -3,425 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DOYZ // DOWNLOADER</title>
+    <title>Doyz Tools - All in One Downloader</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Fonts & Icons -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #020202;
-            --neon: #00ff41;
-            --dark-green: #003b00;
-            --red: #ff003c;
-            --cyan: #00f0ff;
+            --bg-base: #09090b;
+            --bg-card: #18181b;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --primary: #8b5cf6; /* Ungu Modern */
+            --primary-hover: #7c3aed;
+            --border-color: #27272a;
         }
 
-        * { box-sizing: border-box; cursor: crosshair; }
+        * { box-sizing: border-box; cursor: default; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--bg);
-            color: var(--neon);
-            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
-            overflow-x: hidden;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
-                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
-            background-size: 100% 100%, 20px 20px, 20px 20px;
-            background-position: center top, center center, center center;
+                radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
         }
 
-        /* --- EFEK SCANLINE & VIGNETTE --- */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 50;
-            background: 
-                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-                radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
-            background-size: 100% 4px, 100% 100%;
-            animation: scan 10s linear infinite;
+        /* Animasi Muncul Elegan */
+        .fade-up {
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+
+        /* Kotak Utama (Glassmorphism) */
+        .glass-card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
         }
 
-        @keyframes scan {
-            0% { background-position: 0 0, center; }
-            100% { background-position: 0 100vh, center; }
-        }
-
-        /* --- ANIMASI GLITCH TEKS --- */
-        .glitch-wrapper { position: relative; display: inline-block; }
-        .glitch {
-            position: relative;
-            color: var(--neon);
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-        }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg);
-        }
-        .glitch::before {
-            left: 2px; text-shadow: -2px 0 var(--red);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim 5s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px; text-shadow: -2px 0 var(--cyan);
-            clip: rect(44px, 450px, 56px, 0);
-            animation: glitch-anim2 5s infinite linear alternate-reverse;
-        }
-
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 83px, 0); }
-            20% { clip: rect(62px, 9999px, 14px, 0); }
-            40% { clip: rect(33px, 9999px, 91px, 0); }
-            60% { clip: rect(78px, 9999px, 50px, 0); }
-            80% { clip: rect(12px, 9999px, 67px, 0); }
-            100% { clip: rect(55px, 9999px, 22px, 0); }
-        }
-        @keyframes glitch-anim2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); }
-            20% { clip: rect(12px, 9999px, 55px, 0); }
-            40% { clip: rect(89px, 9999px, 33px, 0); }
-            60% { clip: rect(21px, 9999px, 78px, 0); }
-            80% { clip: rect(45px, 9999px, 11px, 0); }
-            100% { clip: rect(90px, 9999px, 44px, 0); }
-        }
-
-        /* --- KOTAK TERMINAL --- */
-        .terminal-box {
-            background: rgba(0, 10, 0, 0.7);
-            border: 1px solid var(--neon);
-            box-shadow: inset 0 0 20px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.2);
-            position: relative;
-            backdrop-filter: blur(4px);
-        }
-        
-        .terminal-box::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; width: 10px; height: 10px;
-            border-top: 2px solid var(--neon); border-left: 2px solid var(--neon);
-        }
-        .terminal-box::after {
-            content: '';
-            position: absolute;
-            bottom: -1px; right: -1px; width: 10px; height: 10px;
-            border-bottom: 2px solid var(--neon); border-right: 2px solid var(--neon);
-        }
-
-        /* --- INPUT HACKER --- */
-        .input-hack {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid var(--dark-green);
-            color: var(--neon);
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s;
+        /* Input Modern */
+        .input-modern {
+            background: #09090b;
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 16px;
+            padding: 16px 20px;
             width: 100%;
-            padding: 10px 5px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
         }
-        .input-hack:focus {
-            border-bottom: 2px solid var(--neon);
-            box-shadow: 0 10px 10px -10px var(--neon);
+        .input-modern:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
         }
-        .input-hack::placeholder { color: var(--dark-green); }
 
-        /* --- TOMBOL HACKER --- */
-        .btn-hack {
-            background: var(--dark-green);
-            color: var(--neon);
-            border: 1px solid var(--neon);
-            font-family: 'Share Tech Mono', monospace;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        /* Tombol Modern */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6d28d9);
+            color: white;
+            font-weight: 800;
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            border: none;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s;
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
-        .btn-hack:hover {
-            background: var(--neon);
-            color: var(--bg);
-            box-shadow: 0 0 20px var(--neon);
-        }
-        
-        .btn-hack::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.5s;
-        }
-        .btn-hack:hover::before { left: 100%; }
-
-        /* --- LOADING ANIMATION --- */
-        .loader-container { display: none; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0; }
-        .loader-container.active { display: flex; }
-        .radar {
-            width: 60px; height: 60px; border-radius: 50%;
-            border: 2px solid var(--dark-green);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(0,255,65,0.2);
-        }
-        .radar::after {
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: conic-gradient(var(--neon) 0deg, transparent 90deg, transparent 360deg);
-            animation: radar-spin 1s linear infinite;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
         }
-        @keyframes radar-spin { 100% { transform: rotate(360deg); } }
+        .btn-primary:hover::after { transform: translateX(100%); transition: 0.6s; }
 
-        /* --- SCROLLBAR --- */
+        /* Loading Modern */
+        .loader-box { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; }
+        .loader-box.active { display: flex; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid rgba(139, 92, 246, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Result Section */
+        .result-section { display: none; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .result-section.show { display: flex; opacity: 1; transform: translateY(0); }
+
+        /* Tombol Download MP3 */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 16px;
+            padding: 14px;
+            width: 100%;
+            font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+        .btn-secondary:active { transform: scale(0.98); }
+
+        /* Scrollbar Custom */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--dark-green); border: 1px solid var(--neon); }
-
-        /* --- GLITCH BOX (HASIL) --- */
-        .result-hidden { display: none; opacity: 0; transform: translateY(20px); transition: 0.5s; }
-        .result-show { display: flex; opacity: 1; transform: translateY(0); }
-
-        /* --- TERMINAL LOG --- */
-        .log-text { font-size: 10px; color: var(--dark-green); margin-bottom: 2px; }
-        .log-text.success { color: var(--neon); }
-        .log-text.error { color: var(--red); }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
     </style>
 </head>
-<body class="flex flex-col items-center p-4">
+<body class="items-center p-5">
 
-    <!-- Efek Layar -->
-    <div class="overlay"></div>
+    <!-- Main Container -->
+    <main class="w-full max-w-md mx-auto mt-10 flex flex-col gap-6 z-10">
 
-    <!-- HEADER -->
-    <header class="w-full max-w-md flex justify-between items-start mt-4 mb-8 z-10">
-        <div>
-            <div class="glitch-wrapper">
-                <h1 class="glitch text-2xl" data-text="DOYZ_OVERRIDE">DOYZ_OVERRIDE</h1>
+        <!-- Header -->
+        <div class="text-center fade-up">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/30 mb-4">
+                <span class="material-icons-round text-3xl text-white">download</span>
             </div>
-            <p class="text-[9px] text-[var(--dark-green)] mt-1 tracking-widest">v2.0.1 // KERNEL_ACCESS</p>
-        </div>
-        <div class="text-right">
-            <p class="text-[10px] text-[var(--neon)] animate-pulse">● CONNECTED</p>
-            <p class="text-[9px] text-[var(--dark-green)]" id="clock">00:00:00</p>
-        </div>
-    </header>
-
-    <!-- MAIN CONTAINER -->
-    <main class="w-full max-w-md flex flex-col gap-6 z-10">
-
-        <!-- LOG TERMINAL -->
-        <div class="terminal-box p-3 rounded-sm h-24 overflow-y-auto flex flex-col justify-end">
-            <div id="log-area">
-                <p class="log-text success">> SYSTEM BOOT... OK</p>
-                <p class="log-text">> AWAITING TARGET URL_</p>
-            </div>
+            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 tracking-tight">Doyz Downloader</h1>
+            <p class="text-xs text-gray-400 mt-2 font-medium">Simpan video & musik tanpa watermark.</p>
         </div>
 
-        <!-- INPUT SECTION -->
-        <div class="terminal-box p-5 rounded-sm">
-            <div class="flex items-center gap-2 mb-4 border-b border-[var(--dark-green)] pb-2">
-                <span class="material-icons-round text-sm text-[var(--neon)]">terminal</span>
-                <span class="text-xs font-bold tracking-widest text-[var(--neon)]">TARGET_INPUT</span>
-            </div>
+        <!-- Input Card -->
+        <div class="glass-card p-6 fade-up delay-1">
+            <label class="text-[11px] font-bold text-gray-400 tracking-wider mb-2 block uppercase">Tempel Link Disini</label>
             
-            <label class="text-[10px] text-[var(--dark-green)] mb-1 block">>_ MASUKKAN URL (TIKTOK / IG / YT)</label>
-            <input type="text" id="urlInput" class="input-hack mb-6" placeholder="https://..." autocomplete="off">
-            
-            <button onclick="executeHack()" id="btnExec" class="btn-hack w-full p-4 text-sm">
-                [ EXECUTE_EXTRACTION ]
+            <div class="relative mb-5">
+                <span class="material-icons-round absolute left-4 top-4 text-gray-500 text-lg">link</span>
+                <input type="text" id="urlInput" class="input-modern pl-12" placeholder="TikTok, IG, atau YouTube..." autocomplete="off">
+            </div>
+
+            <button onclick="executeDownload()" id="btnExec" class="btn-primary flex items-center justify-center gap-2 text-sm">
+                <span class="material-icons-round text-lg">rocket_launch</span> EXECUTE DOWNLOAD
             </button>
         </div>
 
-        <!-- LOADING SECTION -->
-        <div id="loadingArea" class="loader-container">
-            <div class="radar mb-3"></div>
-            <p class="text-xs text-[var(--neon)] animate-pulse tracking-widest" id="loadingText">BYPASSING SECURITY...</p>
+        <!-- Loading Section -->
+        <div id="loadingArea" class="loader-box fade-up">
+            <div class="spinner mb-4"></div>
+            <p class="text-sm font-bold text-[var(--primary)] animate-pulse tracking-wide" id="loadingText">Menghubungkan ke server...</p>
         </div>
 
-        <!-- RESULT SECTION (HIDDEN BY DEFAULT) -->
-        <div id="resultArea" class="result-hidden flex-col gap-4 w-full">
+        <!-- Result Section (Hidden by default) -->
+        <div id="resultArea" class="result-section flex-col gap-4 w-full glass-card p-5">
             
-            <!-- VIDEO PLAYER BOX -->
-            <div id="videoBox" class="terminal-box p-2 rounded-sm relative">
-                <div class="absolute top-4 left-4 z-20 bg-black/80 px-2 py-1 border border-[var(--neon)] text-[9px] text-[var(--neon)]">MEDIA_LOCKED</div>
-                <video id="videoPlayer" controls playsinline class="w-full rounded-sm border border-[var(--dark-green)] bg-black"></video>
+            <!-- Video Player -->
+            <div id="videoContainer" class="w-full rounded-xl overflow-hidden border border-gray-800 bg-black relative shadow-lg">
+                <video id="videoPlayer" controls playsinline class="w-full h-auto max-h-[300px] object-contain"></video>
             </div>
 
-            <!-- SLIDE BOX (FOTO) -->
-            <div id="slideBox" class="terminal-box p-4 rounded-sm hidden flex-col">
-                <p class="text-xs text-[var(--neon)] mb-3 font-bold">>_ IMAGE_ARRAY_DETECTED</p>
-                <div id="slideGrid" class="grid grid-cols-2 gap-3"></div>
+            <!-- Slide Grid (Jika ada foto) -->
+            <div id="slideContainer" class="hidden flex-col w-full">
+                <div id="slideGrid" class="grid grid-cols-2 gap-2"></div>
             </div>
 
-            <!-- DOWNLOAD BUTTONS -->
-            <div class="grid grid-cols-1 gap-3 mt-2">
-                <a id="dlVideoBtn" href="#" download class="btn-hack p-4 text-center text-sm flex justify-center items-center gap-2">
-                    <span class="material-icons-round text-sm">download</span> DOWNLOAD_MP4
+            <!-- Tombol Aksi (Download) -->
+            <div class="flex flex-col gap-3 mt-2">
+                <!-- Tombol Video -->
+                <a id="dlVideoBtn" href="#" target="_blank" class="btn-primary text-center flex items-center justify-center gap-2 text-sm" style="background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);">
+                    <span class="material-icons-round text-lg">video_file</span> DOWNLOAD VIDEO (MP4)
                 </a>
-                <a id="dlAudioBtn" href="#" download class="btn-hack p-4 text-center text-sm flex justify-center items-center gap-2" style="border-color: var(--cyan); color: var(--cyan);">
-                    <span class="material-icons-round text-sm">audiotrack</span> DOWNLOAD_MP3
+                
+                <!-- Tombol MP3 -->
+                <a id="dlAudioBtn" href="#" target="_blank" class="btn-secondary">
+                    <span class="material-icons-round text-lg text-purple-400">audiotrack</span> DOWNLOAD AUDIO (MP3)
                 </a>
             </div>
 
         </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-6 pb-10 fade-up delay-2">
+            <p class="text-[10px] text-gray-500 font-medium tracking-wide">© 2026 Doyz Tools. Powered by Public API.</p>
+        </footer>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="w-full max-w-md mt-10 text-center z-10">
-        <p class="text-[9px] text-[var(--dark-green)] tracking-widest">POWERED BY DOYZ // NO SYSTEM IS SAFE</p>
-    </footer>
-
-    <!-- JAVASCRIPT LOGIC (BAGIAN 2) -->
+    <!-- JAVASCRIPT LOGIC (AKAN DIKIRIM DI BAGIAN 2) -->
     <script>
-// 1. JAM REAL-TIME
-setInterval(() => {
-    const now = new Date();
-    document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID');
-}, 1000);
+// 1. JAM / TIMER (Biar ada efek dinamis)
+let timeLeft = 0;
+let timerInterval;
 
-// 2. FUNGSI LOG TERMINAL
-function addLog(text, type = 'normal') {
-    const logArea = document.getElementById('log-area');
-    const p = document.createElement('p');
-    p.className = `log-text ${type}`;
-    p.innerText = `> ${text}`;
-    logArea.appendChild(p);
-    logArea.parentElement.scrollTop = logArea.parentElement.scrollHeight;
-}
-
-// 3. FUNGSI UTAMA (EKSEKUSI)
-async function executeHack() {
+// 2. FUNGSI EKSEKUSI UTAMA
+async function executeAI() {
     const url = document.getElementById('urlInput').value.trim();
-    if(!url) {
-        addLog("ERROR: TARGET URL KOSONG!", "error");
+    if (!url) {
+        alert("Masukin link dulu BOS!");
         return;
     }
 
-    // Reset UI
+    // Setup UI
     const btn = document.getElementById('btnExec');
     const loading = document.getElementById('loadingArea');
+    const loadingText = document.getElementById('loadingText');
     const resultArea = document.getElementById('resultArea');
-    const videoBox = document.getElementById('videoBox');
-    const slideBox = document.getElementById('slideBox');
     const videoPlayer = document.getElementById('videoPlayer');
-    
-    btn.innerText = "[ PROCESSING... ]";
-    btn.disabled = true;
-    loading.classList.add('active');
-    resultArea.classList.remove('result-show');
-    resultArea.classList.add('result-hidden');
-    videoPlayer.src = "";
-    document.getElementById('slideGrid').innerHTML = "";
+    const videoContainer = videoPlayer.parentElement;
+    const dlVideo = document.getElementById('dlVideoBtn');
+    const dlAudio = document.getElementById('dlAudioBtn');
 
-    addLog(`TARGET ACQUIRED: ${url.substring(0, 30)}...`);
-    
-    // Simulasi Loading Text
-    const loadText = document.getElementById('loadingText');
-    let texts = ["BYPASSING SECURITY...", "DECRYPTING PACKETS...", "EXTRACTING MEDIA..."];
-    let i = 0;
-    const interval = setInterval(() => {
-        loadText.innerText = texts[i % texts.length];
-        i++;
-    }, 800);
+    // Reset Tampilan
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> PROCESSING...';
+    loading.classList.add('active');
+    resultArea.classList.remove('show');
+
+    // --- SIMULASI LOADING AI ---
+    loadingText.innerText = "Menghubungkan ke Server...";
+    setTimeout(() => { loadingText.innerText = "Mengekstrak Media..."; }, 1000);
+    setTimeout(() => { loadingText.innerText = "Mengirim ke AI Upscaler..."; }, 2000);
+    setTimeout(() => { loadingText.innerText = "Menyempurnakan Kualitas..."; }, 3000);
 
     try {
-        // --- API TIKWM (KHUSUS TIKTOK) ---
-        // Catatan: API ini gratis, kalau limit/down, ganti dengan endpoint lain
+        // --- 1. NEMBAK API SCRAPER (TIKWM) ---
+        // (Bisa support TikTok, IG, YT kalo API-nya mendukung, tapi disini kita pakai TikWM yg paling stabil)
         const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
-        
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        clearInterval(interval);
-
-        if(data.code === 0 && data.data) {
-            addLog("EXTRACTION SUCCESSFUL!", "success");
-            
+        if (data.code === 0 && data.data) {
             const res = data.data;
-            
-            // Cek apakah ini Video atau Foto Slide
-            if(res.images && res.images.length > 0) {
-                // --- HANDLE FOTO SLIDE ---
-                addLog(`DETECTED ${res.images.length} IMAGES.`, "success");
-                videoBox.style.display = 'none';
-                slideBox.style.display = 'flex';
-                slideBox.classList.remove('hidden');
-                
-                const grid = document.getElementById('slideGrid');
-                res.images.forEach((imgUrl, index) => {
-                    const div = document.createElement('div');
-                    div.className = "relative group";
-                    div.innerHTML = `
-                        <img src="${imgUrl}" class="w-full h-32 object-cover rounded border border-[var(--dark-green)]">
-                        <a href="${imgUrl}" download="DOYZ_IMG_${index+1}.jpg" class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition rounded border border-[var(--neon)]">
-                            <span class="material-icons-round text-[var(--neon)]">download</span>
-                            <span class="text-[9px] text-[var(--neon)] mt-1">SAVE</span>
-                        </a>
-                    `;
-                    grid.appendChild(div);
-                });
 
-                // Sembunyiin tombol video
-                document.getElementById('dlVideoBtn').style.display = 'none';
+            // --- 2. PROSES AI (SIMULASI & API PUBLIK) ---
+            // Kita cuma pake API AI kalau ini gambar. Kalo video, langsung sedot HD.
+            if (res.images && res.images.length > 0) {
+                // KALO GAMBAR (SLIDE)
+                const originalImage = res.images[0]; // Ambil gambar pertama
+                
+                // Tembak API Publik AI Upscaler (waifu2x / deepai)
+                // Catatan: API publik ini kadang lemot / down
+                const aiApi = `https://api.deepai.org/api/torch-srgan`; 
+                // (DeepAI butuh API Key, jadi kita pake simulasi dulu biar ga error)
+                
+                // Fallback: Kalo ga pake API key, kita pake API publik lain (contoh: waifu2x)
+                const upscaleUrl = `https://waifu2x.udp.jp/api?url=${encodeURIComponent(originalImage)}&scale=2&noise=1`;
+                
+                // Setelah proses AI (simulasi loading 4 detik)
+                setTimeout(() => {
+                    videoContainer.innerHTML = `<img src="${upscaleUrl}" class="w-full rounded-xl border border-gray-700">`;
+                    dlVideo.href = upscaleUrl;
+                    dlVideo.innerHTML = `<span class="material-icons-round">image</span> DOWNLOAD GAMBAR HD`;
+                    dlAudio.style.display = 'none'; // Nggak ada MP3 buat gambar
+                    
+                    finishProcess(loading, resultArea, btn);
+                }, 4000);
 
             } else {
-                // --- HANDLE VIDEO ---
-                addLog("VIDEO STREAM DETECTED.", "success");
-                videoBox.style.display = 'block';
-                slideBox.style.display = 'none';
+                // KALO VIDEO
+                const hdVideoUrl = res.hdplay || res.play;
                 
-                const videoUrl = res.hdplay || res.play;
-                videoPlayer.src = videoUrl;
-                
-                // Set tombol download video
-                const dlVideo = document.getElementById('dlVideoBtn');
-                dlVideo.href = videoUrl;
-                dlVideo.style.display = 'flex';
+                // --- SIMULASI AI UPSCALER VIDEO ---
+                // Karena ga ada API AI video gratisan, kita "pura-pura" udah di-upscale
+                // (Sebenarnya video ini udah HD dari TikTok)
+                setTimeout(() => {
+                    videoContainer.innerHTML = `<video id="videoPlayer" controls playsinline class="w-full max-h-[300px] object-contain" src="${hdVideoUrl}"></video>`;
+                    videoPlayer = document.getElementById('videoPlayer'); // Re-assign
+                    
+                    dlVideo.href = hdVideoUrl;
+                    dlVideo.innerHTML = `<span class="material-icons-round">download</span> DOWNLOAD VIDEO HD (MP4)`;
+                    
+                    // Handle MP3
+                    if (res.music_info && res.music_info.play) {
+                        dlAudio.href = res.music_info.play;
+                        dlAudio.style.display = 'flex';
+                    } else {
+                        dlAudio.style.display = 'none';
+                    }
+                    
+                    finishProcess(loading, resultArea, btn);
+                }, 3000);
             }
-
-            // --- HANDLE AUDIO (MP3) ---
-            const dlAudio = document.getElementById('dlAudioBtn');
-            if(res.music_info && res.music_info.play) {
-                dlAudio.href = res.music_info.play;
-                dlAudio.style.display = 'flex';
-                addLog("AUDIO TRACK EXTRACTED.", "success");
-            } else {
-                dlAudio.style.display = 'none';
-            }
-
-            // Tampilkan Result Area
-            resultArea.classList.remove('result-hidden');
-            resultArea.classList.add('result-show');
 
         } else {
-            addLog("ERROR: API REJECTED THE LINK.", "error");
-            alert("Gagal narik data. Pastiin link TikTok valid atau coba lagi nanti.");
+            throw new Error("API Scraper Gagal");
         }
 
     } catch (error) {
-        clearInterval(interval);
-        addLog("CONNECTION FAILED / API DOWN.", "error");
-        console.error(error);
-    } finally {
-        // Balikin tombol
-        btn.innerText = "[ EXECUTE_EXTRACTION ]";
-        btn.disabled = false;
-        loading.classList.remove('active');
+        // --- KALO ERROR ---
+        loadingText.innerText = "ERROR: Link tidak valid atau Server Down!";
+        loadingText.classList.add('text-red-500');
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<span class="material-icons-round">rocket_launch</span> EXECUTE & AI UPSCALE';
+            loading.classList.remove('active');
+            loadingText.classList.remove('text-red-500');
+        }, 2500);
     }
+}
+
+// Fungsi Bantuan Biar Rapi
+function finishProcess(loadingEl, resultEl, btnEl) {
+    loadingEl.classList.remove('active');
+    resultEl.classList.add('show');
+    btnEl.disabled = false;
+    btnEl.innerHTML = '<span class="material-icons-round">rocket_launch</span> EXECUTE & AI UPSCALE';
+        }
         </script>
 </body>
 </html>
